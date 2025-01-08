@@ -6,7 +6,22 @@ void abertura(){
     printf("/ Hangman Game /\n");
     printf("/***************/\n");
 }
- 
+void chuta(char chutes[], int* tentativas){
+    char chute;
+    printf("Qual a letra? ");
+    scanf(" %c", &chute);
+
+    chutes[*tentativas] = chute;
+    (*tentativas)++;
+}
+void jachutou(char letra, char* chutes, int tentativas){
+    for(int j = 0; j < tentativas; j++){
+        if(chutes[j] == letra){
+            achou = 1;
+            break;
+        }
+    }
+}
 int main() {
 
     abertura();
@@ -17,17 +32,12 @@ int main() {
     int acertou = 0, enforcou = 0, tentativas = 0;
     char chutes[26];
 
-    do {//lógica de percorrer o alfabeto e comparar com a palavra e os chutes
+    do {//imprime a palavra secreta
         for(int i = 0; i < strlen(palavrasecreta); i++) {
-            
             int achou = 0;
 
-            for(int j = 0; j < tentativas; j++){ //a letra ja foi chutada?
-                if(chutes[j] == palavrasecreta[i]){
-                    achou = 1;
-                    break;
-                }
-            }
+           jachutou(palavrasecreta[i], chutes, tentativas);
+           
             if(achou) {//se achou = 1 = verdade logo printa a letra chutada
                 printf("%c ", palavrasecreta[i]);
             } else {
@@ -35,13 +45,11 @@ int main() {
             }
         }
         printf("\n");
- 
-        char chute; //captura um novo chute
-        printf("Qual letra? ");
-        scanf(" %c", &chute);
- 
-        chutes[tentativas] = chute;
-        tentativas++;
+
+        chuta(chutes, tentativas);
+
+        printf("Voce ja deu %d chutes\n", tentativas);
+
     } while (!acertou && !enforcou);
 
     return 0;
