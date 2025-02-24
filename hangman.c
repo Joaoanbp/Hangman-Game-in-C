@@ -1,20 +1,22 @@
 #include <stdio.h>
 #include <string.h>
+char palavrasecreta[20];
+char chutes[26];
+int tentativas = 0;
 
 void abertura(){
     printf("/***************/\n");
     printf("/ Hangman Game /\n");
     printf("/***************/\n");
 }
-void chuta(char chutes[], int* tentativas){
+void chuta(){
     char chute;
     printf("Qual a letra? ");
     scanf(" %c", &chute);
 
-    chutes[*tentativas] = chute;
-    (*tentativas)++;
+    chutes[tentativas] = chute;
 }
-int jachutou(char letra, char* chutes, int tentativas){
+int jachutou(char letra){
     int achou = 0;                                                                                                  
     for(int j = 0; j < tentativas; j++){
         if(chutes[j] == letra){
@@ -24,34 +26,33 @@ int jachutou(char letra, char* chutes, int tentativas){
     }
     return achou;
 }
-int main() {
+void desenhaforca(){
+    printf("Voce ja deu %d chute\n", tentativas);
 
-    abertura();
-
-    char palavrasecreta[20];
-    sprintf(palavrasecreta, "MELANCIA");
- 
-    int acertou = 0, enforcou = 0, tentativas = 0;
-    char chutes[26];
-
-    do {//imprime a palavra secreta
-        for(int i = 0; i < strlen(palavrasecreta); i++) {
-            int achou = 0;
-           jachutou(palavrasecreta[i], chutes, tentativas);
-
-           
-            if(achou) {//se achou = 1 = verdade logo printa a letra chutada
-                printf("%c ", palavrasecreta[i]);
-            } else {
-                printf("_ ");
-            }
+    for(int i = 0; i< strlen(palavrasecreta); i++){
+        if(jachutou(palavrasecreta[i])){
+            printf("%c ", palavrasecreta[i]);
+        } else {
+            printf("_ ");
         }
-        printf("\n");
+    }
+    printf("\n");
+}
+void escolhepalavra(){
+    sprintf(palavrasecreta, "MELANCIA");
+}
 
-        chuta(chutes, tentativas);
+int main() {    
+    int acertou = 0, enforcou = 0;
+    
+    abertura();
+    escolhepalavra();
 
-        printf("Voce ja deu %d chutes\n", tentativas);
+    do {        
+        desenhaforca();
+        chuta();
 
+        tentativas++;
     } while (!acertou && !enforcou);
 
     return 0;
